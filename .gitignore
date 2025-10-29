@@ -1,7 +1,38 @@
-.venv/
-.ipynb_checkpoints/
+# Byte-compiled / optimized / DLL files
 __pycache__/
-data/interim/
-data/processed/
-data/raw/
-reports/figures/*.tmp
+*.pyc
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Data files - It's a good practice to not commit large data files
+data/
+
+# IDE / Editor specific
+.vscode/
+.idea/
