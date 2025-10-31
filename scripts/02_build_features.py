@@ -1,11 +1,11 @@
 import pandas as pd
-from pathlib import Path
 from src.features import build_numeric_features
 from src.data_io import save_csv
+from pathlib import Path
 
 PROC = Path("data/processed")
 
-if __name__ == "__main__":
+def run():
     print("🚀 Gerando colunas de features numéricas...")
 
     df = pd.read_csv(PROC / "unified.csv")
@@ -21,3 +21,6 @@ if __name__ == "__main__":
     save_csv(out, PROC / "unified_with_features.csv")
     print(f"✅ Features salvas em data/processed/unified_with_features.csv")
     print(f"✅ Colunas adicionadas: {list(feat_df.columns)}")
+
+if __name__ == "__main__":
+    run()

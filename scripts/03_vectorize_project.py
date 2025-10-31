@@ -1,15 +1,15 @@
 import joblib
 import pandas as pd
-from pathlib import Path
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
 from sklearn.manifold import TSNE
 import umap
 from src.data_io import save_csv
+from pathlib import Path
 
 PROC = Path("data/processed")
 
-if __name__ == "__main__":
+def run():
     print("🚀 Iniciando vetorização e projeções...")
     df = pd.read_csv(PROC / "unified_with_features.csv")
 
@@ -37,9 +37,9 @@ if __name__ == "__main__":
     print("⚙️  Gerando projeção UMAP 2D (pode demorar alguns minutos)...")
     reducer = umap.UMAP(
         n_components=2,
-        random_state=42,
         n_neighbors=15,
-        min_dist=0.1
+        min_dist=0.1,
+        n_jobs=-1  # Usa todos os núcleos de CPU para acelerar o processo
     )
     umap2 = reducer.fit_transform(X)
     umap_df = pd.DataFrame(umap2, columns=["umap1", "umap2"])
@@ -65,3 +65,6 @@ if __name__ == "__main__":
     joblib.dump(tfidf, PROC / "tfidf_vectorizer.joblib")
     print("💾 Vetorizador TF-IDF salvo em tfidf_vectorizer.joblib")
     print("🎉 Vetores e projeções gerados com sucesso!")
+
+if __name__ == "__main__":
+    run()

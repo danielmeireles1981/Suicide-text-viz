@@ -81,20 +81,18 @@ pip install -r requirements.txt
 
 ## ⚙️ Como Executar o Pipeline
 
-Com o ambiente ativado e os dados no lugar certo, execute os scripts na ordem correta para processar os dados e gerar os resultados.
+
+Agora, com essas alterações, você pode simplesmente rodar `python run_pipeline.py` e assistir a mágica acontecer!
+
+<!--
+[PROMPT_SUGGESTION]Poderíamos adicionar um campo de texto na aplicação para testar a limpeza, o sentimento e a extração de features em uma nova frase?[/PROMPT_SUGGESTION]
+[PROMPT_SUGGESTION]Como posso adicionar logging aos arquivos do pipeline para registrar informações mais detalhadas em um arquivo de log?[/PROMPT_SUGGESTION]
+-->
+Com o ambiente ativado e os dados no lugar certo, você pode executar o pipeline inteiro com um único comando a partir da **pasta raiz do projeto**.
 
 ```bash
-# 1. Unifica e limpa os datasets
-python scripts/01_unify_datasets.py
-
-# 2. Cria features numéricas a partir do texto
-python scripts/02_build_features.py
-
-# 3. Vetoriza os textos e cria as projeções (PCA, UMAP, t-SNE)
-python scripts/03_vectorize_project.py
-
-# 4. Gera todos os gráficos e os salva em reports/figures/
-python scripts/04_make_plots.py
+# Executa todas as etapas, desde a unificação dos dados até a geração dos gráficos
+python run_pipeline.py
 ```
 
 Ao final da execução, a pasta `reports/figures/` conterá todos os gráficos atualizados.

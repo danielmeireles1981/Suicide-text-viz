@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pathlib import Path
 from src.data_io import ensure_dir
+from pathlib import Path
 
 PROC = Path("data/processed")
 FIGS = Path("reports/figures")
@@ -66,8 +66,7 @@ def plot_umap():
         plt.close()
         print(f"✅ Gráfico UMAP colorido por {color_by} salvo.")
 
-# --- Execução principal ---
-if __name__ == "__main__":
+def run():
     print("📊 Gerando gráficos...")
     csv_path = PROC / "unified_with_features.csv"
 
@@ -81,3 +80,7 @@ if __name__ == "__main__":
     plot_umap()
     print(f"🎨 Figuras salvas em: {FIGS}")
     print("🎉 Gráficos gerados com sucesso!")
+
+# --- Execução principal ---
+if __name__ == "__main__":
+    run()
