@@ -2,18 +2,6 @@
 
 Este projeto realiza a unificação, limpeza, engenharia de features e visualização de dois datasets públicos contendo textos relacionados à ideação suicida. O objetivo é explorar as características dos textos e visualizar a separação entre as classes (ideação vs. controle) usando técnicas de redução de dimensionalidade como UMAP e t-SNE.
 
-## Resultados Visuais
-
-Abaixo estão alguns dos gráficos gerados pelo pipeline de análise:
-
-| Balanceamento de Classes | Correlação de Features |
-| :---: | :---: |
-| ![Balanceamento de Classes](reports/figures/balanceamento_classes.png) | ![Correlação de Features](reports/figures/correlacao.png) |
-
-| Projeção UMAP por Rótulo | Projeção UMAP por Fonte do Dataset |
-| :---: | :---: |
-| ![UMAP por Rótulo](reports/figures/umap_label.png) | ![UMAP por Fonte](reports/figures/umap_source.png) |
-
 ## Estrutura do Projeto
 
 ```
