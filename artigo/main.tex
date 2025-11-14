@@ -18,14 +18,14 @@
 \begin{document}
 
 \title{
-AnÃ¡lise Visual de PadrÃµes LinguÃ­sticos em Textos com Risco de SuicÃ­dio
+Análise Visual de Padrões Linguísticos em Textos com Risco de Suicídio
 }
 
 \author{
 \IEEEauthorblockN{Daniel Meireles do Rego}
 \IEEEauthorblockA{
 UNESP -- Universidade Estadual Paulista \\
-SÃ£o JosÃ© do Rio Preto, Brasil \\
+São José do Rio Preto, Brasil \\
 daniel.meireles@unesp.br
 }
 }
@@ -33,203 +33,201 @@ daniel.meireles@unesp.br
 \maketitle
 
 \begin{abstract}
-Este artigo descreve um processo para analisar padrÃµes linguÃ­sticos em textos de mÃ­dias sociais relacionados ao risco de suicÃ­dio. O sistema inclui vÃ¡rias etapas: unificaÃ§Ã£o de bases de dados, limpeza de texto, extraÃ§Ã£o de caracterÃ­sticas numÃ©ricas, reduÃ§Ã£o de dimensionalidade, identificaÃ§Ã£o de tÃ³picos e anÃ¡lise de emoÃ§Ãµes. Utilizamos mÃ©todos como TF-IDF, UMAP, t-SNE e LDA para criar visualizaÃ§Ãµes bidimensionais claras e fornecer detalhes estatÃ­sticos sobre palavras e emoÃ§Ãµes. O processo termina com um relatÃ³rio em HTML gerado automaticamente. O relatÃ³rio apresenta grÃ¡ficos de distribuiÃ§Ã£o de classes, mapas de correlaÃ§Ã£o, nuvens de palavras e termos importantes. Os resultados mostram que esse mÃ©todo consegue distinguir entre expressÃµes linguÃ­sticas suicidas e nÃ£o suicidas. Isso apoia a detecÃ§Ã£o precoce e pesquisas em saÃºde mental utilizando dados de mÃ­dias sociais.
+Este artigo descreve um processo para analisar padrões linguísticos em textos de mídias sociais relacionados ao risco de suicídio. O sistema inclui várias etapas: unificação de bases de dados, limpeza de texto, extração de características numéricas, redução de dimensionalidade, identificação de tópicos e análise de emoções. Utilizamos métodos como TF-IDF, UMAP, t-SNE e LDA para criar visualizações bidimensionais claras e fornecer detalhes estatísticos sobre palavras e emoções. O processo termina com um relatório em HTML gerado automaticamente. O relatório apresenta gráficos de distribuição de classes, mapas de correlação, nuvens de palavras e termos importantes. Os resultados mostram que esse método consegue distinguir entre expressões linguísticas suicidas e não suicidas. Isso apoia a detecção precoce e pesquisas em saúde mental utilizando dados de mídias sociais.
 \end{abstract}
 
 \begin{IEEEkeywords}
-detecÃ§Ã£o de suicÃ­dio, anÃ¡lise visual, mineraÃ§Ã£o de texto, reduÃ§Ã£o de dimensionalidade, anÃ¡lise de sentimento, modelagem de tÃ³picos.
+detecção de suicídio, análise visual, mineração de texto, redução de dimensionalidade, análise de sentimento, modelagem de tópicos.
 \end{IEEEkeywords}
 
-\section{IntroduÃ§Ã£o}
+\section{Introdução}
 
-A quantidade de dados textuais digitais tem aumentado rapidamente, especialmente nas mÃ­dias sociais. Esse crescimento torna necessÃ¡rio desenvolver sistemas capazes de analisar padrÃµes de linguagem e emoÃ§Ãµes relacionados Ã  saÃºde mental. Detectar pensamentos suicidas por meio de texto tornou-se uma importante Ã¡rea de pesquisa em processamento de linguagem natural e anÃ¡lise visual. MÃ©todos tradicionais baseados em estatÃ­sticas de texto podem nÃ£o captar significados sutis e contextos presentes em expressÃµes de autoagressÃ£o. A anÃ¡lise visual combina processamento computacional com interpretaÃ§Ã£o humana, permitindo que usuÃ¡rios explorem dados linguÃ­sticos complexos de forma interativa~\cite{ward2015}.
+A quantidade de dados textuais digitais tem aumentado rapidamente, especialmente nas mídias sociais. Esse crescimento torna necessário desenvolver sistemas capazes de analisar padrões de linguagem e emoções relacionados à saúde mental. Detectar pensamentos suicidas por meio de texto tornou-se uma importante área de pesquisa em processamento de linguagem natural e análise visual. Métodos tradicionais baseados em estatísticas de texto podem não captar significados sutis e contextos presentes em expressões de autoagressão. A análise visual combina processamento computacional com interpretação humana, permitindo que usuários explorem dados linguísticos complexos de forma interativa~\cite{ward2015}.
 
-Novas abordagens de reduÃ§Ã£o de dimensionalidade e visualizaÃ§Ã£o de dados melhoraram a forma como interpretamos textos com alta dimensionalidade. Marcilio Jr. e Eler~\cite{marcilio2020} apresentaram o SADIRE, um mÃ©todo de amostragem que preserva contexto importante e limites entre classes em visualizaÃ§Ãµes bidimensionais. O mÃ©todo mostra que manter a estrutura dos dados ajuda na compreensÃ£o de conjuntos complexos. TÃ©cnicas como t-SNE e UMAP tambÃ©m sÃ£o usadas para revelar relaÃ§Ãµes semÃ¢nticas no texto enquanto reduzem o excesso visual em dispersÃµes~\cite{maaten2008, mcinnes2018}.
+Novas abordagens de redução de dimensionalidade e visualização de dados melhoraram a forma como interpretamos textos com alta dimensionalidade. Marcilio Jr. e Eler~\cite{marcilio2020} apresentaram o SADIRE, um método de amostragem que preserva contexto importante e limites entre classes em visualizações bidimensionais. O método mostra que manter a estrutura dos dados ajuda na compreensão de conjuntos complexos. Técnicas como t-SNE e UMAP também são usadas para revelar relações semânticas no texto enquanto reduzem o excesso visual em dispersões~\cite{maaten2008, mcinnes2018}.
 
-Este artigo descreve um processo simples de anÃ¡lise visual para estudar padrÃµes linguÃ­sticos ligados ao risco de suicÃ­dio. O processo inclui sete etapas: unificaÃ§Ã£o de dados, prÃ©-processamento de texto, extraÃ§Ã£o de caracterÃ­sticas, reduÃ§Ã£o de dimensionalidade, modelagem de tÃ³picos, anÃ¡lise de sentimentos e criaÃ§Ã£o de relatÃ³rio. Ele segue princÃ­pios de visualizaÃ§Ã£o clara e eficiente, conforme discutido por Ward, Grinstein e Keim~\cite{ward2015}. O design prioriza facilidade de interpretaÃ§Ã£o, escalabilidade e rapidez na anÃ¡lise.
+Este artigo descreve um processo simples de análise visual para estudar padrões linguísticos ligados ao risco de suicídio. O processo inclui sete etapas: unificação de dados, pré-processamento de texto, extração de características, redução de dimensionalidade, modelagem de tópicos, análise de sentimentos e criação de relatório. Ele segue princípios de visualização clara e eficiente, conforme discutido por Ward, Grinstein e Keim~\cite{ward2015}. O design prioriza facilidade de interpretação, escalabilidade e rapidez na análise.
 
-O principal objetivo deste trabalho Ã© criar um sistema claro e automÃ¡tico que combine anÃ¡lise textual e ferramentas visuais. Ele fornece visÃµes detalhadas de padrÃµes linguÃ­sticos e emocionais em discussÃµes sobre suicÃ­dio. Ao utilizar modelos estatÃ­sticos de linguagem e visuais interativos, nosso sistema contribui para a detecÃ§Ã£o precoce e apoia mÃ©todos de IA transparente em pesquisas de saÃºde mental.
+O principal objetivo deste trabalho é criar um sistema claro e automático que combine análise textual e ferramentas visuais. Ele fornece visões detalhadas de padrões linguísticos e emocionais em discussões sobre suicídio. Ao utilizar modelos estatísticos de linguagem e visuais interativos, nosso sistema contribui para a detecção precoce e apoia métodos de IA transparente em pesquisas de saúde mental.
 
 \section{Trabalhos Relacionados}
 
-A detecÃ§Ã£o de risco de suicÃ­dio em textos digitais tem se consolidado como uma linha de pesquisa essencial na interseÃ§Ã£o entre ciÃªncia de dados, linguÃ­stica computacional e saÃºde mental. Nos Ãºltimos anos, o avanÃ§o das redes sociais ampliou o interesse por modelos capazes de identificar sinais de sofrimento psicolÃ³gico a partir da linguagem. Diversos estudos tÃªm buscado traduzir expressÃµes subjetivas --- como desesperanÃ§a, solidÃ£o e culpa --- em padrÃµes linguÃ­sticos quantificÃ¡veis que possam ser analisados de forma automÃ¡tica e interpretÃ¡vel.
+A detecção de risco de suicídio em textos digitais tem se consolidado como uma linha de pesquisa essencial na interseção entre ciência de dados, linguística computacional e saúde mental. Nos últimos anos, o avanço das redes sociais ampliou o interesse por modelos capazes de identificar sinais de sofrimento psicológico a partir da linguagem. Diversos estudos têm buscado traduzir expressões subjetivas --- como desesperança, solidão e culpa --- em padrões linguísticos quantificáveis que possam ser analisados de forma automática e interpretável.
 
-Trabalhos recentes exploram representaÃ§Ãµes semÃ¢nticas profundas para compreender o contexto emocional de mensagens potencialmente suicidas. Ji et al.~\cite{ji2021} demonstraram que modelos baseados em \textit{BERT embeddings} conseguem capturar nuances de linguagem coloquial e ironia, aspectos muitas vezes perdidos em mÃ©todos tradicionais. De forma semelhante, Benton et al.~\cite{benton2017} propuseram um modelo multitarefa para prever condiÃ§Ãµes de saÃºde mental utilizando dados limitados de redes sociais, mostrando que padrÃµes lexicais, quando analisados em sequÃªncia temporal, podem antecipar episÃ³dios depressivos.
+Trabalhos recentes exploram representações semânticas profundas para compreender o contexto emocional de mensagens potencialmente suicidas. Ji et al.~\cite{ji2021} demonstraram que modelos baseados em \textit{BERT embeddings} conseguem capturar nuances de linguagem coloquial e ironia, aspectos muitas vezes perdidos em métodos tradicionais. De forma semelhante, Benton et al.~\cite{benton2017} propuseram um modelo multitarefa para prever condições de saúde mental utilizando dados limitados de redes sociais, mostrando que padrões lexicais, quando analisados em sequência temporal, podem antecipar episódios depressivos.
 
-Apesar dos avanÃ§os em aprendizado profundo, cresce o reconhecimento de que a interpretabilidade Ã© tÃ£o importante quanto a acurÃ¡cia. Nesse sentido, a anÃ¡lise visual tem se destacado por aproximar o raciocÃ­nio humano dos resultados computacionais. Ward, Grinstein e Keim~\cite{ward2015} defendem que a combinaÃ§Ã£o entre visualizaÃ§Ã£o e algoritmos automÃ¡ticos Ã© o caminho mais eficiente para compreender estruturas complexas --- especialmente em contextos sensÃ­veis, como a saÃºde mental. AtravÃ©s da exploraÃ§Ã£o interativa, o pesquisador consegue nÃ£o apenas verificar padrÃµes, mas tambÃ©m formular hipÃ³teses a partir da observaÃ§Ã£o direta dos dados.
+Apesar dos avanços em aprendizado profundo, cresce o reconhecimento de que a interpretabilidade é tão importante quanto a acurácia. Nesse sentido, a análise visual tem se destacado por aproximar o raciocínio humano dos resultados computacionais. Ward, Grinstein e Keim~\cite{ward2015} defendem que a combinação entre visualização e algoritmos automáticos é o caminho mais eficiente para compreender estruturas complexas --- especialmente em contextos sensíveis, como a saúde mental. Através da exploração interativa, o pesquisador consegue não apenas verificar padrões, mas também formular hipóteses a partir da observação direta dos dados.
 
-TÃ©cnicas de reduÃ§Ã£o de dimensionalidade, como t-SNE~\cite{maaten2008} e UMAP~\cite{mcinnes2018}, tÃªm se mostrado particularmente eficazes na representaÃ§Ã£o visual de dados textuais de alta dimensionalidade. Essas tÃ©cnicas projetam vetores de texto em espaÃ§os bidimensionais, permitindo observar a formaÃ§Ã£o de grupos semÃ¢nticos relacionados a temas e emoÃ§Ãµes. Ainda assim, como destacam Marcilio Jr. e Eler~\cite{marcilio2020}, a reduÃ§Ã£o excessiva pode causar sobreposiÃ§Ã£o e perda de estrutura contextual. Para contornar esse problema, os autores propuseram o SADIRE (\textit{Sampling based on Dimensionality Reduction}), um mÃ©todo que preserva fronteiras de classe e reduz redundÃ¢ncias em projeÃ§Ãµes bidimensionais. Essa abordagem reforÃ§a a importÃ¢ncia de estratÃ©gias de amostragem que mantenham a coerÃªncia semÃ¢ntica durante a visualizaÃ§Ã£o.
+Técnicas de redução de dimensionalidade, como t-SNE~\cite{maaten2008} e UMAP~\cite{mcinnes2018}, têm se mostrado particularmente eficazes na representação visual de dados textuais de alta dimensionalidade. Essas técnicas projetam vetores de texto em espaços bidimensionais, permitindo observar a formação de grupos semânticos relacionados a temas e emoções. Ainda assim, como destacam Marcilio Jr. e Eler~\cite{marcilio2020}, a redução excessiva pode causar sobreposição e perda de estrutura contextual. Para contornar esse problema, os autores propuseram o SADIRE (\textit{Sampling based on Dimensionality Reduction}), um método que preserva fronteiras de classe e reduz redundâncias em projeções bidimensionais. Essa abordagem reforça a importância de estratégias de amostragem que mantenham a coerência semântica durante a visualização.
 
-Outros estudos recentes seguem a mesma direÃ§Ã£o, aliando tÃ©cnicas de aprendizado profundo e visualizaÃ§Ã£o explicativa. Saha et al.~\cite{saha2022}, por exemplo, desenvolveram um painel interativo para investigar padrÃµes de ideaÃ§Ã£o suicida em fÃ³runs online, combinando modelagem de tÃ³picos e anÃ¡lise de sentimento. JÃ¡ Kang et al.~\cite{kang2020} exploraram visualizaÃ§Ãµes psicossociais de postagens depressivas, evidenciando como o uso de \textit{clusters} e mapas emocionais pode revelar padrÃµes de discurso de autodepreciaÃ§Ã£o e desesperanÃ§a.
+Outros estudos recentes seguem a mesma direção, aliando técnicas de aprendizado profundo e visualização explicativa. Saha et al.~\cite{saha2022}, por exemplo, desenvolveram um painel interativo para investigar padrões de ideação suicida em fóruns online, combinando modelagem de tópicos e análise de sentimento. Já Kang et al.~\cite{kang2020} exploraram visualizações psicossociais de postagens depressivas, evidenciando como o uso de \textit{clusters} e mapas emocionais pode revelar padrões de discurso de autodepreciação e desesperança.
 
-De forma geral, os trabalhos revisados apontam para uma convergÃªncia entre aprendizado de mÃ¡quina e anÃ¡lise visual, buscando nÃ£o apenas detectar, mas compreender os mecanismos linguÃ­sticos que expressam sofrimento psicolÃ³gico. O presente estudo avanÃ§a nesse sentido ao propor um \textit{pipeline} completo e automatizado, que une processamento linguÃ­stico, modelagem semÃ¢ntica e visualizaÃ§Ã£o interativa em uma Ãºnica estrutura. Ao integrar anÃ¡lise estatÃ­stica, tÃ©cnicas de reduÃ§Ã£o de dimensionalidade e relatÃ³rios interpretativos, esta abordagem contribui para a construÃ§Ã£o de ferramentas mais transparentes e Ãºteis Ã  pesquisa em saÃºde mental.
+De forma geral, os trabalhos revisados apontam para uma convergência entre aprendizado de máquina e análise visual, buscando não apenas detectar, mas compreender os mecanismos linguísticos que expressam sofrimento psicológico. O presente estudo avança nesse sentido ao propor um \textit{pipeline} completo e automatizado, que une processamento linguístico, modelagem semântica e visualização interativa em uma única estrutura. Ao integrar análise estatística, técnicas de redução de dimensionalidade e relatórios interpretativos, esta abordagem contribui para a construção de ferramentas mais transparentes e úteis à pesquisa em saúde mental.
 
 \section{Metodologia}
 
-O \textit{pipeline} proposto foi desenvolvido com o objetivo de integrar tÃ©cnicas consolidadas de processamento de linguagem natural e visualizaÃ§Ã£o interativa em um Ãºnico fluxo de anÃ¡lise. Sua estrutura Ã© composta por sete etapas principais, que vÃ£o desde a unificaÃ§Ã£o de bases de dados atÃ© a geraÃ§Ã£o automÃ¡tica de relatÃ³rios analÃ­ticos. Cada mÃ³dulo foi projetado para garantir coerÃªncia entre o tratamento estatÃ­stico e a interpretaÃ§Ã£o visual, seguindo princÃ­pios de clareza e eficiÃªncia perceptual discutidos por Ward, Grinstein e Keim~\cite{ward2015}.
+O \textit{pipeline} proposto foi desenvolvido com o objetivo de integrar técnicas consolidadas de processamento de linguagem natural e visualização interativa em um único fluxo de análise. Sua estrutura é composta por sete etapas principais, que vão desde a unificação de bases de dados até a geração automática de relatórios analíticos. Cada módulo foi projetado para garantir coerência entre o tratamento estatístico e a interpretação visual, seguindo princípios de clareza e eficiência perceptual discutidos por Ward, Grinstein e Keim~\cite{ward2015}.
 
-\subsection{UnificaÃ§Ã£o dos Dados}
+\subsection{Unificação dos Dados}
 
-A primeira etapa do \textit{pipeline} consistiu na integraÃ§Ã£o de quatro bases de dados pÃºblicas relacionadas Ã  ideaÃ§Ã£o suicida em redes sociais. O script \texttt{01\_unify\_datasets.py} foi responsÃ¡vel por consolidar essas fontes em um Ãºnico \textit{corpus}, padronizando colunas, rÃ³tulos e formatos.
-Durante essa fase, foi aplicada uma funÃ§Ã£o de normalizaÃ§Ã£o que unificou diferentes convenÃ§Ãµes de anotaÃ§Ã£o (``suicidal'', ``non-suicidal'', ``potential suicide post'' etc.) em um Ãºnico esquema binÃ¡rio. Essa abordagem segue a recomendaÃ§Ã£o de Benton et al.~\cite{benton2017}, que enfatizam a necessidade de consistÃªncia na rotulagem de dados textuais quando se analisam padrÃµes de saÃºde mental em mÃ­dias sociais.
+A primeira etapa do \textit{pipeline} consistiu na integração de quatro bases de dados públicas relacionadas à ideação suicida em redes sociais. O script \texttt{01\_unify\_datasets.py} foi responsável por consolidar essas fontes em um único \textit{corpus}, padronizando colunas, rótulos e formatos.
+Durante essa fase, foi aplicada uma função de normalização que unificou diferentes convenções de anotação (``suicidal'', ``non-suicidal'', ``potential suicide post'' etc.) em um único esquema binário. Essa abordagem segue a recomendação de Benton et al.~\cite{benton2017}, que enfatizam a necessidade de consistência na rotulagem de dados textuais quando se analisam padrões de saúde mental em mídias sociais.
 
-AlÃ©m disso, foram aplicadas rotinas bÃ¡sicas de limpeza e remoÃ§Ã£o de duplicidades, conforme boas prÃ¡ticas de prÃ©-processamento textual descritas por Liu et al.~\cite{liu2019}, garantindo integridade semÃ¢ntica antes da vetorizaÃ§Ã£o. O resultado foi um arquivo unificado (\texttt{unified.csv}) contendo textos limpos e suas respectivas classes.
+Além disso, foram aplicadas rotinas básicas de limpeza e remoção de duplicidades, conforme boas práticas de pré-processamento textual descritas por Liu et al.~\cite{liu2019}, garantindo integridade semântica antes da vetorização. O resultado foi um arquivo unificado (\texttt{unified.csv}) contendo textos limpos e suas respectivas classes.
 
-\subsection{ExtraÃ§Ã£o de CaracterÃ­sticas LinguÃ­sticas}
+\subsection{Extração de Características Linguísticas}
 
-O segundo mÃ³dulo, \texttt{02\_build\_features.py}, gerou um conjunto de caracterÃ­sticas numÃ©ricas a partir do texto processado. As \textit{features} incluÃ­ram comprimento mÃ©dio das mensagens, frequÃªncia de \textit{hashtags}, menÃ§Ãµes, uso de letras maiÃºsculas, pontuaÃ§Ã£o e URLs.
-Esses atributos, embora simples, sÃ£o descritos por Saha et al.~\cite{saha2022} como bons indicadores de intensidade emocional e comportamento comunicativo em contextos de sofrimento psicolÃ³gico. A combinaÃ§Ã£o de aspectos lexicais e estruturais permitiu enriquecer a representaÃ§Ã£o textual, aproximando-se de uma anÃ¡lise psicossocial da linguagem.
+O segundo módulo, \texttt{02\_build\_features.py}, gerou um conjunto de características numéricas a partir do texto processado. As \textit{features} incluíram comprimento médio das mensagens, frequência de \textit{hashtags}, menções, uso de letras maiúsculas, pontuação e URLs.
+Esses atributos, embora simples, são descritos por Saha et al.~\cite{saha2022} como bons indicadores de intensidade emocional e comportamento comunicativo em contextos de sofrimento psicológico. A combinação de aspectos lexicais e estruturais permitiu enriquecer a representação textual, aproximando-se de uma análise psicossocial da linguagem.
 
-\subsection{VetorizaÃ§Ã£o e ReduÃ§Ã£o de Dimensionalidade}
+\subsection{Vetorização e Redução de Dimensionalidade}
 
-O terceiro mÃ³dulo (\texttt{03\_vectorize\_project.py}) foi responsÃ¡vel pela representaÃ§Ã£o vetorial e projeÃ§Ã£o bidimensional dos textos. Inicialmente, as mensagens foram convertidas em vetores TF-IDF, tÃ©cnica clÃ¡ssica de ponderaÃ§Ã£o que mede a relevÃ¢ncia de cada termo em relaÃ§Ã£o ao \textit{corpus} global~\cite{salton1988}.
-Em seguida, foram aplicados mÃ©todos de reduÃ§Ã£o de dimensionalidade --- Truncated SVD, UMAP e t-SNE --- para projetar os dados em espaÃ§os bidimensionais interpretÃ¡veis. Essa etapa foi fortemente inspirada nas propostas de Marcilio Jr. e Eler~\cite{marcilio2020} e de McInnes et al.~\cite{mcinnes2018}, que demonstraram a importÃ¢ncia de preservar a estrutura contextual dos dados em representaÃ§Ãµes visuais.
+O terceiro módulo (\texttt{03\_vectorize\_project.py}) foi responsável pela representação vetorial e projeção bidimensional dos textos. Inicialmente, as mensagens foram convertidas em vetores TF-IDF, técnica clássica de ponderação que mede a relevância de cada termo em relação ao \textit{corpus} global~\cite{salton1988}.
+Em seguida, foram aplicados métodos de redução de dimensionalidade --- Truncated SVD, UMAP e t-SNE --- para projetar os dados em espaços bidimensionais interpretáveis. Essa etapa foi fortemente inspirada nas propostas de Marcilio Jr. e Eler~\cite{marcilio2020} e de McInnes et al.~\cite{mcinnes2018}, que demonstraram a importância de preservar a estrutura contextual dos dados em representações visuais.
 
-O uso combinado de SVD e UMAP permitiu equilibrar desempenho computacional e qualidade de agrupamento, enquanto o t-SNE foi aplicado em uma amostra reduzida para destacar relaÃ§Ãµes locais entre expressÃµes linguÃ­sticas. Como sugerem Ward et al.~\cite{ward2015}, a integraÃ§Ã£o entre algoritmos de reduÃ§Ã£o e percepÃ§Ã£o humana Ã© o nÃºcleo da anÃ¡lise visual eficaz.
+O uso combinado de SVD e UMAP permitiu equilibrar desempenho computacional e qualidade de agrupamento, enquanto o t-SNE foi aplicado em uma amostra reduzida para destacar relações locais entre expressões linguísticas. Como sugerem Ward et al.~\cite{ward2015}, a integração entre algoritmos de redução e percepção humana é o núcleo da análise visual eficaz.
 
-\subsection{VisualizaÃ§Ã£o e InterpretaÃ§Ã£o GrÃ¡fica}
+\subsection{Visualização e Interpretação Gráfica}
 
-O quarto mÃ³dulo (\texttt{04\_make\_plots.py}) gerou as principais visualizaÃ§Ãµes exploratÃ³rias do estudo. Foram criados grÃ¡ficos de balanceamento de classes, mapas de correlaÃ§Ã£o de variÃ¡veis numÃ©ricas e projeÃ§Ãµes bidimensionais coloridas por categoria e origem dos dados.
-Essas representaÃ§Ãµes seguiram diretrizes perceptuais de contraste, simplicidade e hierarquia visual, em consonÃ¢ncia com os princÃ­pios de design propostos por Ware~\cite{ware2013} e reforÃ§ados por Ward et al.~\cite{ward2015}. A utilizaÃ§Ã£o de bibliotecas como Matplotlib e Seaborn proporcionou flexibilidade e clareza na comunicaÃ§Ã£o dos resultados, permitindo uma leitura mais intuitiva dos agrupamentos e padrÃµes de correlaÃ§Ã£o.
+O quarto módulo (\texttt{04\_make\_plots.py}) gerou as principais visualizações exploratórias do estudo. Foram criados gráficos de balanceamento de classes, mapas de correlação de variáveis numéricas e projeções bidimensionais coloridas por categoria e origem dos dados.
+Essas representações seguiram diretrizes perceptuais de contraste, simplicidade e hierarquia visual, em consonância com os princípios de design propostos por Ware~\cite{ware2013} e reforçados por Ward et al.~\cite{ward2015}. A utilização de bibliotecas como Matplotlib e Seaborn proporcionou flexibilidade e clareza na comunicação dos resultados, permitindo uma leitura mais intuitiva dos agrupamentos e padrões de correlação.
 
-\subsection{Modelagem de TÃ³picos}
+\subsection{Modelagem de Tópicos}
 
-O mÃ³dulo \texttt{05\_topic\_modeling.py} aplicou Latent Dirichlet Allocation (LDA) para identificar temas recorrentes em textos suicidas e nÃ£o suicidas. Essa tÃ©cnica probabilÃ­stica, introduzida por Blei, Ng e Jordan~\cite{blei2003}, Ã© amplamente utilizada para descobrir tÃ³picos latentes em grandes coleÃ§Ãµes textuais.
-No contexto deste estudo, a modelagem de tÃ³picos teve papel interpretativo: evidenciou padrÃµes semÃ¢nticos relacionados a sentimentos de isolamento, desespero e resignaÃ§Ã£o, frequentemente relatados em publicaÃ§Ãµes de risco. Os resultados complementaram as projeÃ§Ãµes visuais ao oferecer uma dimensÃ£o qualitativa Ã  anÃ¡lise quantitativa dos textos.
+O módulo \texttt{05\_topic\_modeling.py} aplicou Latent Dirichlet Allocation (LDA) para identificar temas recorrentes em textos suicidas e não suicidas. Essa técnica probabilística, introduzida por Blei, Ng e Jordan~\cite{blei2003}, é amplamente utilizada para descobrir tópicos latentes em grandes coleções textuais.
+No contexto deste estudo, a modelagem de tópicos teve papel interpretativo: evidenciou padrões semânticos relacionados a sentimentos de isolamento, desespero e resignação, frequentemente relatados em publicações de risco. Os resultados complementaram as projeções visuais ao oferecer uma dimensão qualitativa à análise quantitativa dos textos.
 
-\subsection{AnÃ¡lise de Sentimento}
+\subsection{Análise de Sentimento}
 
-No sexto mÃ³dulo (\texttt{06\_sentiment\_analysis.py}), foi empregada a biblioteca TextBlob para extrair polaridade e subjetividade das mensagens. Embora se trate de uma ferramenta de processamento tradicional, sua simplicidade favorece a interpretabilidade e o cruzamento direto com os resultados visuais.
-Como observam Ji et al.~\cite{ji2021}, a anÃ¡lise de sentimento ainda desempenha papel importante na triagem inicial de conteÃºdo emocional, servindo como camada adicional de validaÃ§Ã£o para modelos mais complexos baseados em \textit{embeddings}. O resultado dessa etapa adicionou colunas de sentimento positivo, negativo e neutro ao conjunto de dados processado, reforÃ§ando a dimensÃ£o afetiva da anÃ¡lise.
+No sexto módulo (\texttt{06\_sentiment\_analysis.py}), foi empregada a biblioteca TextBlob para extrair polaridade e subjetividade das mensagens. Embora se trate de uma ferramenta de processamento tradicional, sua simplicidade favorece a interpretabilidade e o cruzamento direto com os resultados visuais.
+Como observam Ji et al.~\cite{ji2021}, a análise de sentimento ainda desempenha papel importante na triagem inicial de conteúdo emocional, servindo como camada adicional de validação para modelos mais complexos baseados em \textit{embeddings}. O resultado dessa etapa adicionou colunas de sentimento positivo, negativo e neutro ao conjunto de dados processado, reforçando a dimensão afetiva da análise.
 
-\subsection{GeraÃ§Ã£o do RelatÃ³rio AnalÃ­tico}
+\subsection{Geração do Relatório Analítico}
 
-Por fim, o mÃ³dulo \texttt{07\_generate\_report.py} consolidou os resultados em um relatÃ³rio HTML interativo, integrando visualizaÃ§Ãµes, tabelas de frequÃªncia e interpretaÃ§Ãµes automÃ¡ticas. Esse relatÃ³rio sintetiza os dados em um formato acessÃ­vel, reunindo grÃ¡ficos de distribuiÃ§Ã£o, nuvens de palavras e termos com maior peso TF-IDF para cada classe.
-Inspirado na abordagem de \textit{visual analytics} descrita por Keim et al.~\cite{keim2010}, o relatÃ³rio final permite que o analista combine a visÃ£o estatÃ­stica com a interpretaÃ§Ã£o visual, promovendo transparÃªncia e reprodutibilidade. Essa etapa reforÃ§a a ideia de que a visualizaÃ§Ã£o nÃ£o Ã© apenas um produto final, mas parte integrante do raciocÃ­nio analÃ­tico~\cite{ward2015}.
+Por fim, o módulo \texttt{07\_generate\_report.py} consolidou os resultados em um relatório HTML interativo, integrando visualizações, tabelas de frequência e interpretações automáticas. Esse relatório sintetiza os dados em um formato acessível, reunindo gráficos de distribuição, nuvens de palavras e termos com maior peso TF-IDF para cada classe.
+Inspirado na abordagem de \textit{visual analytics} descrita por Keim et al.~\cite{keim2010}, o relatório final permite que o analista combine a visão estatística com a interpretação visual, promovendo transparência e reprodutibilidade. Essa etapa reforça a ideia de que a visualização não é apenas um produto final, mas parte integrante do raciocínio analítico~\cite{ward2015}.
 
-Em sÃ­ntese, a metodologia proposta alinha fundamentos teÃ³ricos de processamento de linguagem natural e visualizaÃ§Ã£o de dados a um fluxo computacional integrado. O \textit{pipeline} resultante permite compreender padrÃµes linguÃ­sticos e emocionais de forma explicÃ¡vel, aproximando o olhar humano do comportamento algorÃ­tmico --- um passo essencial rumo a uma inteligÃªncia artificial mais transparente e Ã©tica em contextos de saÃºde mental.
+Em síntese, a metodologia proposta alinha fundamentos teóricos de processamento de linguagem natural e visualização de dados a um fluxo computacional integrado. O \textit{pipeline} resultante permite compreender padrões linguísticos e emocionais de forma explicável, aproximando o olhar humano do comportamento algorítmico --- um passo essencial rumo a uma inteligência artificial mais transparente e ética em contextos de saúde mental.
 
+\subsection{Disponibilidade de Código}
 
-\subsection*{Disponibilidade de Código}
-
-Todo o código-fonte do pipeline, incluindo scripts de pré-processamento, vetorização, modelagem de tópicos, análise de sentimento e geração de relatórios, está disponível publicamente em:
-\url{https://github.com/danielmeireles1981/Suicide-text-viz}
+Todo o código-fonte, scripts de pré-processamento e geração de relatórios, bem como os arquivos de configuração da aplicação, estão disponíveis em: \url{https://github.com/danielmeireles1981/Suicide-text-viz}.
 
 \section{Resultados}
 
-A execuÃ§Ã£o completa do \textit{pipeline} resultou em um conjunto abrangente de saÃ­das visuais e estatÃ­sticas capazes de revelar diferenÃ§as consistentes entre textos com e sem indÃ­cios de ideaÃ§Ã£o suicida. Os resultados foram analisados a partir de mÃºltiplas perspectivas --- estrutural, semÃ¢ntica e emocional ---, o que possibilitou compreender o comportamento linguÃ­stico dos grupos com maior riqueza interpretativa.
+A execução completa do \textit{pipeline} resultou em um conjunto abrangente de saídas visuais e estatísticas capazes de revelar diferenças consistentes entre textos com e sem indícios de ideação suicida. Os resultados foram analisados a partir de múltiplas perspectivas --- estrutural, semântica e emocional ---, o que possibilitou compreender o comportamento linguístico dos grupos com maior riqueza interpretativa.
 
 \subsection{Estrutura e Balanceamento das Classes}
 
-O primeiro conjunto de resultados estÃ¡ relacionado Ã  distribuiÃ§Ã£o de classes no \textit{corpus} unificado. ApÃ³s a padronizaÃ§Ã£o e a remoÃ§Ã£o de duplicidades, observou-se um leve desbalanceamento entre textos suicidas e nÃ£o suicidas, com predominÃ¢ncia da classe negativa. Esse padrÃ£o Ã© comum em bases coletadas em redes sociais, nas quais mensagens de ideaÃ§Ã£o correspondem a uma fraÃ§Ã£o minoritÃ¡ria, porÃ©m de alto interesse analÃ­tico~\cite{ji2021}.
+O primeiro conjunto de resultados está relacionado à distribuição de classes no \textit{corpus} unificado. Após a padronização e a remoção de duplicidades, observou-se um leve desbalanceamento entre textos suicidas e não suicidas, com predominância da classe negativa. Esse padrão é comum em bases coletadas em redes sociais, nas quais mensagens de ideação correspondem a uma fração minoritária, porém de alto interesse analítico~\cite{ji2021}.
 
-O grÃ¡fico de barras gerado no mÃ³dulo \texttt{04\_make\_plots.py} (Figura~\ref{fig:balanceamento_classes}) ilustra essa diferenÃ§a, permitindo uma visualizaÃ§Ã£o direta do nÃºmero de amostras por categoria. Apesar do desbalanceamento, a quantidade de exemplos positivos foi suficiente para permitir o treinamento de modelos de vetorizaÃ§Ã£o e anÃ¡lise sem comprometer a estabilidade estatÃ­stica.
+O gráfico de barras gerado no módulo \texttt{04\_make\_plots.py} (Figura~\ref{fig:balanceamento_classes}) ilustra essa diferença, permitindo uma visualização direta do número de amostras por categoria. Apesar do desbalanceamento, a quantidade de exemplos positivos foi suficiente para permitir o treinamento de modelos de vetorização e análise sem comprometer a estabilidade estatística.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/balanceamento_classes.png}
-\caption{DistribuiÃ§Ã£o das classes no conjunto de dados unificado, destacando o desbalanceamento entre textos suicidas e nÃ£o suicidas.}
+\caption{Distribuição das classes no conjunto de dados unificado, destacando o desbalanceamento entre textos suicidas e não suicidas.}
 \label{fig:balanceamento_classes}
 \end{figure}
 
-\subsection{CorrelaÃ§Ã£o entre Atributos NumÃ©ricos}
+\subsection{Correlação entre Atributos Numéricos}
 
-A anÃ¡lise de correlaÃ§Ã£o entre as \textit{features} linguÃ­sticas mostrou relaÃ§Ãµes moderadas entre o comprimento dos textos e o uso de sinais de pontuaÃ§Ã£o emocional, como pontos de exclamaÃ§Ã£o e interrogaÃ§Ãµes mÃºltiplas. Esse tipo de correlaÃ§Ã£o Ã© frequentemente citado em estudos sobre comunicaÃ§Ã£o emocional online~\cite{saha2022}, indicando que mensagens com maior carga afetiva tendem a apresentar estruturas mais longas e marcadas por intensificadores lexicais.
+A análise de correlação entre as \textit{features} linguísticas mostrou relações moderadas entre o comprimento dos textos e o uso de sinais de pontuação emocional, como pontos de exclamação e interrogações múltiplas. Esse tipo de correlação é frequentemente citado em estudos sobre comunicação emocional online~\cite{saha2022}, indicando que mensagens com maior carga afetiva tendem a apresentar estruturas mais longas e marcadas por intensificadores lexicais.
 
-O mapa de calor gerado (Figura~\ref{fig:correlacao}) revelou ainda que a proporÃ§Ã£o de letras maiÃºsculas e a presenÃ§a de \textit{hashtags} aparecem mais frequentemente em textos nÃ£o suicidas --- possivelmente associados a linguagem expressiva, campanhas de apoio e postagens de conscientizaÃ§Ã£o. Em contraste, textos suicidas mostraram maior concentraÃ§Ã£o de termos descritivos e menor uso de recursos grÃ¡ficos. Essa distinÃ§Ã£o reforÃ§a a hipÃ³tese de que a linguagem emocional negativa tende a ser mais direta, introspectiva e menos performÃ¡tica.
+O mapa de calor gerado (Figura~\ref{fig:correlacao}) revelou ainda que a proporção de letras maiúsculas e a presença de \textit{hashtags} aparecem mais frequentemente em textos não suicidas --- possivelmente associados a linguagem expressiva, campanhas de apoio e postagens de conscientização. Em contraste, textos suicidas mostraram maior concentração de termos descritivos e menor uso de recursos gráficos. Essa distinção reforça a hipótese de que a linguagem emocional negativa tende a ser mais direta, introspectiva e menos performática.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/correlacao.png}
-\caption{Mapa de calor de correlaÃ§Ã£o entre atributos numÃ©ricos extraÃ­dos dos textos, evidenciando relaÃ§Ãµes entre comprimento, pontuaÃ§Ã£o e outros indicadores linguÃ­sticos.}
+\caption{Mapa de calor de correlação entre atributos numéricos extraídos dos textos, evidenciando relações entre comprimento, pontuação e outros indicadores linguísticos.}
 \label{fig:correlacao}
 \end{figure}
 
-\subsection{VisualizaÃ§Ãµes Bidimensionais}
+\subsection{Visualizações Bidimensionais}
 
-As projeÃ§Ãµes de reduÃ§Ã£o de dimensionalidade mostraram padrÃµes espaciais claros entre as classes. Na visualizaÃ§Ã£o gerada com UMAP (Figura~\ref{fig:umap_label}), os textos com indÃ­cios suicidas formaram aglomerados bem definidos, separados visualmente do grupo de controle. Esse comportamento sugere que a estrutura semÃ¢ntica dos textos de risco apresenta uma coerÃªncia interna maior, possivelmente refletindo repertÃ³rios linguÃ­sticos repetitivos e padrÃµes emocionais homogÃªneos.
+As projeções de redução de dimensionalidade mostraram padrões espaciais claros entre as classes. Na visualização gerada com UMAP (Figura~\ref{fig:umap_label}), os textos com indícios suicidas formaram aglomerados bem definidos, separados visualmente do grupo de controle. Esse comportamento sugere que a estrutura semântica dos textos de risco apresenta uma coerência interna maior, possivelmente refletindo repertórios linguísticos repetitivos e padrões emocionais homogêneos.
 
-Uma segunda projeÃ§Ã£o (Figura~\ref{fig:umap_source}), colorida de acordo com a origem dos dados, evidenciou como diferentes bases contribuem para a formaÃ§Ã£o dos grupos, indicando que a separaÃ§Ã£o entre fontes nÃ£o Ã© tÃ£o acentuada quanto a separaÃ§Ã£o entre classes. Isso reforÃ§a a ideia de que os padrÃµes linguÃ­sticos suicidas sÃ£o relativamente consistentes entre plataformas distintas.
+Uma segunda projeção (Figura~\ref{fig:umap_source}), colorida de acordo com a origem dos dados, evidenciou como diferentes bases contribuem para a formação dos grupos, indicando que a separação entre fontes não é tão acentuada quanto a separação entre classes. Isso reforça a ideia de que os padrões linguísticos suicidas são relativamente consistentes entre plataformas distintas.
 
-A projeÃ§Ã£o com t-SNE, embora mais sensÃ­vel Ã  amostragem, corroborou a tendÃªncia de separaÃ§Ã£o, evidenciando agrupamentos locais mais densos. Segundo van der Maaten e Hinton~\cite{maaten2008}, esse tipo de comportamento indica alta consistÃªncia intraclasse e baixo ruÃ­do semÃ¢ntico, o que fortalece a confiabilidade do modelo de vetorizaÃ§Ã£o TF-IDF.
+A projeção com t-SNE, embora mais sensível à amostragem, corroborou a tendência de separação, evidenciando agrupamentos locais mais densos. Segundo van der Maaten e Hinton~\cite{maaten2008}, esse tipo de comportamento indica alta consistência intraclasse e baixo ruído semântico, o que fortalece a confiabilidade do modelo de vetorização TF-IDF.
 
-Por outro lado, a projeÃ§Ã£o por Truncated SVD (PCA esparso) mostrou-se Ãºtil para captar variaÃ§Ãµes mais globais. Essa combinaÃ§Ã£o de mÃ©todos permitiu observar tanto o posicionamento relativo das classes quanto as zonas de transiÃ§Ã£o --- regiÃµes em que mensagens ambÃ­guas ou de tom indefinido se sobrepÃµem parcialmente entre os grupos. Esses ``limiares semÃ¢nticos'' sÃ£o particularmente interessantes para estudos futuros, pois podem representar mensagens de risco latente, ainda nÃ£o classificadas explicitamente como suicidas.
+Por outro lado, a projeção por Truncated SVD (PCA esparso) mostrou-se útil para captar variações mais globais. Essa combinação de métodos permitiu observar tanto o posicionamento relativo das classes quanto as zonas de transição --- regiões em que mensagens ambíguas ou de tom indefinido se sobrepõem parcialmente entre os grupos. Esses ``limiares semânticos'' são particularmente interessantes para estudos futuros, pois podem representar mensagens de risco latente, ainda não classificadas explicitamente como suicidas.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/umap_label.png}
-\caption{ProjeÃ§Ã£o UMAP colorida pelas classes suicida e nÃ£o suicida. Observa-se a formaÃ§Ã£o de aglomerados distintos para cada grupo.}
+\caption{Projeção UMAP colorida pelas classes suicida e não suicida. Observa-se a formação de aglomerados distintos para cada grupo.}
 \label{fig:umap_label}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/umap_source.png}
-\caption{ProjeÃ§Ã£o UMAP colorida pela origem dos dados. As fontes se misturam parcialmente, indicando que a separaÃ§Ã£o principal ocorre em nÃ­vel semÃ¢ntico, e nÃ£o apenas por base.}
+\caption{Projeção UMAP colorida pela origem dos dados. As fontes se misturam parcialmente, indicando que a separação principal ocorre em nível semântico, e não apenas por base.}
 \label{fig:umap_source}
 \end{figure}
 
-\subsection{Modelagem de TÃ³picos e Estrutura SemÃ¢ntica}
+\subsection{Modelagem de Tópicos e Estrutura Semântica}
 
-A modelagem de tÃ³picos via LDA revelou agrupamentos temÃ¡ticos recorrentes, permitindo uma visÃ£o qualitativa da linguagem empregada. Nos textos nÃ£o suicidas, emergiram tÃ³picos associados Ã  rotina, relaÃ§Ãµes sociais e mensagens de encorajamento. JÃ¡ nas mensagens suicidas, predominavam termos relacionados a desespero, perda, cansaÃ§o e desejo de desaparecimento --- expressÃµes que coincidem com marcadores psicolÃ³gicos descritos em Benton et al.~\cite{benton2017}.
+A modelagem de tópicos via LDA revelou agrupamentos temáticos recorrentes, permitindo uma visão qualitativa da linguagem empregada. Nos textos não suicidas, emergiram tópicos associados à rotina, relações sociais e mensagens de encorajamento. Já nas mensagens suicidas, predominavam termos relacionados a desespero, perda, cansaço e desejo de desaparecimento --- expressões que coincidem com marcadores psicológicos descritos em Benton et al.~\cite{benton2017}.
 
-Um dos tÃ³picos mais representativos incluÃ­a palavras como \textit{tired}, \textit{alone}, \textit{worthless} e \textit{pain}, refletindo construÃ§Ãµes linguÃ­sticas de autodepreciaÃ§Ã£o e desesperanÃ§a. Esse padrÃ£o reforÃ§a o papel da linguagem como espelho de estados mentais e valida a relevÃ¢ncia da anÃ¡lise textual no rastreamento de sofrimento psÃ­quico.
+Um dos tópicos mais representativos incluía palavras como \textit{tired}, \textit{alone}, \textit{worthless} e \textit{pain}, refletindo construções linguísticas de autodepreciação e desesperança. Esse padrão reforça o papel da linguagem como espelho de estados mentais e valida a relevância da análise textual no rastreamento de sofrimento psíquico.
 
-As nuvens de palavras geradas para cada classe (Figuras~\ref{fig:wordcloud_class0} e~\ref{fig:wordcloud_class1}) destacam os termos mais frequentes nos grupos nÃ£o suicida e suicida, respectivamente, fornecendo uma sÃ­ntese visual dos principais vocÃ¡bulos associados a cada tipo de discurso.
+As nuvens de palavras geradas para cada classe (Figuras~\ref{fig:wordcloud_class0} e~\ref{fig:wordcloud_class1}) destacam os termos mais frequentes nos grupos não suicida e suicida, respectivamente, fornecendo uma síntese visual dos principais vocábulos associados a cada tipo de discurso.
 
-AlÃ©m disso, o modelo revelou sobreposiÃ§Ã£o parcial entre alguns tÃ³picos das classes, indicando que o discurso de apoio ou empatia em postagens nÃ£o suicidas frequentemente compartilha o mesmo vocabulÃ¡rio de dor e vulnerabilidade. Esse achado corrobora a ideia de que o contexto discursivo Ã© determinante para a correta interpretaÃ§Ã£o emocional do texto~\cite{saha2022}.
+Além disso, o modelo revelou sobreposição parcial entre alguns tópicos das classes, indicando que o discurso de apoio ou empatia em postagens não suicidas frequentemente compartilha o mesmo vocabulário de dor e vulnerabilidade. Esse achado corrobora a ideia de que o contexto discursivo é determinante para a correta interpretação emocional do texto~\cite{saha2022}.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/wordcloud_class0.png}
-\caption{Nuvem de palavras para textos nÃ£o suicidas, evidenciando termos associados a apoio, rotina e interaÃ§Ãµes sociais.}
+\caption{Nuvem de palavras para textos não suicidas, evidenciando termos associados a apoio, rotina e interações sociais.}
 \label{fig:wordcloud_class0}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\columnwidth]{figuras/wordcloud_class1.png}
-\caption{Nuvem de palavras para textos suicidas, destacando vocÃ¡bulos ligados a sofrimento, solidÃ£o e desesperanÃ§a.}
+\caption{Nuvem de palavras para textos suicidas, destacando vocábulos ligados a sofrimento, solidão e desesperança.}
 \label{fig:wordcloud_class1}
 \end{figure}
 
-\subsection{AnÃ¡lise de Sentimento e Polaridade}
+\subsection{Análise de Sentimento e Polaridade}
 
-A etapa de anÃ¡lise de sentimento complementou os resultados da modelagem de tÃ³picos. Observou-se uma predominÃ¢ncia de polaridade negativa e alta subjetividade nas mensagens da classe suicida, enquanto os textos de controle apresentaram maior dispersÃ£o entre sentimentos positivos e neutros. Os valores de polaridade obtidos pelo TextBlob mostraram coerÃªncia com as projeÃ§Ãµes UMAP, reforÃ§ando a validade cruzada entre mÃ©todos quantitativos e visuais.
+A etapa de análise de sentimento complementou os resultados da modelagem de tópicos. Observou-se uma predominância de polaridade negativa e alta subjetividade nas mensagens da classe suicida, enquanto os textos de controle apresentaram maior dispersão entre sentimentos positivos e neutros. Os valores de polaridade obtidos pelo TextBlob mostraram coerência com as projeções UMAP, reforçando a validade cruzada entre métodos quantitativos e visuais.
 
-Ã‰ interessante notar que, mesmo entre textos classificados como nÃ£o suicidas, alguns apresentaram sentimentos negativos --- geralmente relacionados a empatia, condolÃªncias ou discussÃµes sobre o tema. Essa constataÃ§Ã£o reforÃ§a que a negatividade lexical isolada nÃ£o Ã© suficiente para indicar risco, sendo o contexto e o padrÃ£o semÃ¢ntico global os fatores decisivos para interpretaÃ§Ã£o correta~\cite{ji2021}.
+É interessante notar que, mesmo entre textos classificados como não suicidas, alguns apresentaram sentimentos negativos --- geralmente relacionados a empatia, condolências ou discussões sobre o tema. Essa constatação reforça que a negatividade lexical isolada não é suficiente para indicar risco, sendo o contexto e o padrão semântico global os fatores decisivos para interpretação correta~\cite{ji2021}.
 
-\subsection{RelatÃ³rio AnalÃ­tico e InterpretaÃ§Ã£o Visual}
+\subsection{Relatório Analítico e Interpretação Visual}
 
-O relatÃ³rio final, gerado automaticamente pelo mÃ³dulo \texttt{07\_generate\_report.py}, consolidou os resultados de todas as etapas em um painel analÃ­tico interativo. O documento HTML apresenta, de forma integrada, grÃ¡ficos de distribuiÃ§Ã£o, nuvens de palavras, tabelas de termos com maior peso TF-IDF e interpretaÃ§Ãµes automÃ¡ticas baseadas na proporÃ§Ã£o de classes e no comprimento mÃ©dio das mensagens.
+O relatório final, gerado automaticamente pelo módulo \texttt{07\_generate\_report.py}, consolidou os resultados de todas as etapas em um painel analítico interativo. O documento HTML apresenta, de forma integrada, gráficos de distribuição, nuvens de palavras, tabelas de termos com maior peso TF-IDF e interpretações automáticas baseadas na proporção de classes e no comprimento médio das mensagens.
 
-A combinaÃ§Ã£o de representaÃ§Ãµes quantitativas e visuais favoreceu uma leitura analÃ­tica mais rica, alinhada aos princÃ­pios de \textit{visual analytics} descritos por Keim et al.~\cite{keim2010}. Essa integraÃ§Ã£o entre dados e visualizaÃ§Ã£o permite que o analista transite entre o detalhe linguÃ­stico e o panorama global, transformando a visualizaÃ§Ã£o em ferramenta de raciocÃ­nio exploratÃ³rio --- e nÃ£o apenas de comunicaÃ§Ã£o de resultados.
+A combinação de representações quantitativas e visuais favoreceu uma leitura analítica mais rica, alinhada aos princípios de \textit{visual analytics} descritos por Keim et al.~\cite{keim2010}. Essa integração entre dados e visualização permite que o analista transite entre o detalhe linguístico e o panorama global, transformando a visualização em ferramenta de raciocínio exploratório --- e não apenas de comunicação de resultados.
 
-\subsection{SÃ­ntese dos Achados}
+\subsection{Síntese dos Achados}
 
-De forma geral, o \textit{pipeline} demonstrou capacidade de distinguir padrÃµes linguÃ­sticos e emocionais com alto grau de interpretabilidade. As visualizaÃ§Ãµes geradas nÃ£o apenas confirmaram a separaÃ§Ã£o semÃ¢ntica entre classes, como tambÃ©m evidenciaram nuances discursivas sutis, especialmente em textos fronteiriÃ§os ou ambÃ­guos.
+De forma geral, o \textit{pipeline} demonstrou capacidade de distinguir padrões linguísticos e emocionais com alto grau de interpretabilidade. As visualizações geradas não apenas confirmaram a separação semântica entre classes, como também evidenciaram nuances discursivas sutis, especialmente em textos fronteiriços ou ambíguos.
 
-Esses resultados indicam que a combinaÃ§Ã£o de reduÃ§Ã£o de dimensionalidade, modelagem de tÃ³picos e anÃ¡lise de sentimento constitui uma estratÃ©gia eficaz para mapear e compreender a linguagem do sofrimento humano em ambientes digitais.
+Esses resultados indicam que a combinação de redução de dimensionalidade, modelagem de tópicos e análise de sentimento constitui uma estratégia eficaz para mapear e compreender a linguagem do sofrimento humano em ambientes digitais.
 
-\section{DiscussÃ£o}
+\section{Discussão}
 
-O \textit{pipeline} proposto fornece estruturas visuais interpretÃ¡veis que auxiliam especialistas no exame de comportamentos linguÃ­sticos. O uso de UMAP e t-SNE melhorou a visibilidade dos agrupamentos, enquanto a modelagem de tÃ³picos ofereceu uma visÃ£o semÃ¢ntica dos diferentes tipos de discurso.
+O \textit{pipeline} proposto fornece estruturas visuais interpretáveis que auxiliam especialistas no exame de comportamentos linguísticos. O uso de UMAP e t-SNE melhorou a visibilidade dos agrupamentos, enquanto a modelagem de tópicos ofereceu uma visão semântica dos diferentes tipos de discurso.
 
-As limitaÃ§Ãµes incluem o viÃ©s do conjunto de dados, a variaÃ§Ã£o no uso da linguagem entre diferentes comunidades e a dependÃªncia das escolhas de prÃ©-processamento. AlÃ©m disso, a utilizaÃ§Ã£o de modelos tradicionais de sentimento pode nÃ£o capturar plenamente as nuances contextuais presentes em expressÃµes ambÃ­guas ou irÃ´nicas, sugerindo espaÃ§o para incorporaÃ§Ã£o futura de modelos baseados em \textit{embeddings} contextuais.
+As limitações incluem o viés do conjunto de dados, a variação no uso da linguagem entre diferentes comunidades e a dependência das escolhas de pré-processamento. Além disso, a utilização de modelos tradicionais de sentimento pode não capturar plenamente as nuances contextuais presentes em expressões ambíguas ou irônicas, sugerindo espaço para incorporação futura de modelos baseados em \textit{embeddings} contextuais.
 
-\section{ConclusÃ£o}
+\section{Conclusão}
 
-Este trabalho apresentou um pipeline de anÃ¡lise visual de padrÃµes linguÃ­sticos voltado ao estudo de textos relacionados ao risco de suicÃ­dio, integrando tÃ©cnicas de processamento de linguagem natural, reduÃ§Ã£o de dimensionalidade e visualizaÃ§Ã£o interativa. Mais do que uma soma de algoritmos, o sistema mostrou-se um ambiente de raciocÃ­nio exploratÃ³rio, em que dados textuais se transformam em estruturas perceptÃ­veis e interpretÃ¡veis.
+Este trabalho apresentou um pipeline de análise visual de padrões linguísticos voltado ao estudo de textos relacionados ao risco de suicídio, integrando técnicas de processamento de linguagem natural, redução de dimensionalidade e visualização interativa. Mais do que uma soma de algoritmos, o sistema mostrou-se um ambiente de raciocínio exploratório, em que dados textuais se transformam em estruturas perceptíveis e interpretáveis.
 
-Os resultados demonstraram que a linguagem Ã© um espelho sensÃ­vel do estado emocional, e que representaÃ§Ãµes visuais podem tornar esse reflexo mais nÃ­tido. As projeÃ§Ãµes UMAP e t-SNE revelaram agrupamentos semanticamente coerentes, enquanto a modelagem de tÃ³picos e a anÃ¡lise de sentimento evidenciaram a concentraÃ§Ã£o de emoÃ§Ãµes negativas, autodepreciativas e autorreferenciais nos textos suicidas. Esses achados confirmam o potencial da anÃ¡lise visual como meio de compreender a dimensÃ£o afetiva da linguagem â€” uma fronteira onde dados e humanidade se encontram.
+Os resultados demonstraram que a linguagem é um espelho sensível do estado emocional, e que representações visuais podem tornar esse reflexo mais nítido. As projeções UMAP e t-SNE revelaram agrupamentos semanticamente coerentes, enquanto a modelagem de tópicos e a análise de sentimento evidenciaram a concentração de emoções negativas, autodepreciativas e autorreferenciais nos textos suicidas. Esses achados confirmam o potencial da análise visual como meio de compreender a dimensão afetiva da linguagem — uma fronteira onde dados e humanidade se encontram.
 
-A principal contribuiÃ§Ã£o deste estudo Ã© a demonstraÃ§Ã£o de que a visualizaÃ§Ã£o nÃ£o apenas comunica resultados, mas cria compreensÃ£o. Ao tornar visÃ­veis estruturas antes restritas a modelos matemÃ¡ticos, o pipeline propÃµe um novo modo de pensar a mineraÃ§Ã£o de texto em contextos sensÃ­veis: menos voltado Ã  classificaÃ§Ã£o automÃ¡tica e mais Ã  interpretaÃ§Ã£o significativa dos padrÃµes humanos. Essa mudanÃ§a de foco Ã© coerente com a visÃ£o defendida por Ward, Grinstein e Keim (2015), segundo a qual o valor da visualizaÃ§Ã£o reside em sua capacidade de unir cogniÃ§Ã£o, percepÃ§Ã£o e anÃ¡lise.
+A principal contribuição deste estudo é a demonstração de que a visualização não apenas comunica resultados, mas cria compreensão. Ao tornar visíveis estruturas antes restritas a modelos matemáticos, o pipeline propõe um novo modo de pensar a mineração de texto em contextos sensíveis: menos voltado à classificação automática e mais à interpretação significativa dos padrões humanos. Essa mudança de foco é coerente com a visão defendida por Ward, Grinstein e Keim (2015), segundo a qual o valor da visualização reside em sua capacidade de unir cognição, percepção e análise.
 
-Do ponto de vista prÃ¡tico, o pipeline oferece uma base metodolÃ³gica para estudos futuros que envolvam dados sociais, psicolÃ³gicos e linguÃ­sticos. Seu carÃ¡ter modular permite incorporar novas fontes de informaÃ§Ã£o e tÃ©cnicas mais avanÃ§adas, como embeddings contextuais (BERT, RoBERTa) ou visualizaÃ§Ãµes dinÃ¢micas baseadas em sÃ©ries temporais. Essas extensÃµes poderÃ£o ampliar a capacidade explicativa do sistema, sem abrir mÃ£o da transparÃªncia e da interpretabilidade â€” aspectos essenciais quando se trata de dados humanos e emocionalmente sensÃ­veis.
+Do ponto de vista prático, o pipeline oferece uma base metodológica para estudos futuros que envolvam dados sociais, psicológicos e linguísticos. Seu caráter modular permite incorporar novas fontes de informação e técnicas mais avançadas, como embeddings contextuais (BERT, RoBERTa) ou visualizações dinâmicas baseadas em séries temporais. Essas extensões poderão ampliar a capacidade explicativa do sistema, sem abrir mão da transparência e da interpretabilidade — aspectos essenciais quando se trata de dados humanos e emocionalmente sensíveis.
 
-AlÃ©m dos avanÃ§os tÃ©cnicos, o trabalho tambÃ©m reforÃ§a uma postura Ã©tica diante do uso de inteligÃªncia artificial em saÃºde mental. Cada linha de cÃ³digo e cada visualizaÃ§Ã£o aqui produzida sÃ£o guiadas pelo princÃ­pio do cuidado: compreender antes de intervir, iluminar sem invadir, e traduzir dados em empatia. A anÃ¡lise visual, nesse contexto, torna-se uma ponte entre o algoritmo e a pessoa â€” entre o que a mÃ¡quina calcula e o que o ser humano sente.
+Além dos avanços técnicos, o trabalho também reforça uma postura ética diante do uso de inteligência artificial em saúde mental. Cada linha de código e cada visualização aqui produzida são guiadas pelo princípio do cuidado: compreender antes de intervir, iluminar sem invadir, e traduzir dados em empatia. A análise visual, nesse contexto, torna-se uma ponte entre o algoritmo e a pessoa — entre o que a máquina calcula e o que o ser humano sente.
 
-Por fim, acredita-se que o presente estudo contribui para o fortalecimento de uma ciÃªncia de dados mais explicÃ¡vel, interdisciplinar e humana, na qual a tecnologia serve como instrumento de escuta e compreensÃ£o. O pipeline desenvolvido abre caminho para abordagens que unem estatÃ­stica, psicologia e design da informaÃ§Ã£o, e demonstra que compreender a linguagem Ã©, em Ãºltima instÃ¢ncia, compreender o prÃ³prio humano que a produz.
+Por fim, acredita-se que o presente estudo contribui para o fortalecimento de uma ciência de dados mais explicável, interdisciplinar e humana, na qual a tecnologia serve como instrumento de escuta e compreensão. O pipeline desenvolvido abre caminho para abordagens que unem estatística, psicologia e design da informação, e demonstra que compreender a linguagem é, em última instância, compreender o próprio humano que a produz.
 
 \begin{thebibliography}{00}
 
