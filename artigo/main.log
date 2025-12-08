@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.11.13)  13 NOV 2025 21:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.11.13)  8 DEC 2025 11:51
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -297,47 +297,47 @@ File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 73.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 80.
  (C:\Program Files\MiKTeX\tex/latex/psnfss\t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 ) [2]
-LaTeX Font Info:    Trying to load font information for U+msa on input line 114.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 121.
  (C:\Program Files\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 114.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 121.
  (C:\Program Files\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 10000) in paragraph at lines 124--125
+Underfull \hbox (badness 10000) in paragraph at lines 131--132
 []\T1/ptm/m/n/10 O grá-fico de bar-ras ge-rado no mó-dulo
  []
 
 
-Underfull \hbox (badness 1721) in paragraph at lines 124--125
+Underfull \hbox (badness 1721) in paragraph at lines 131--132
 \T1/pcr/m/n/10 04_make_plots.py \T1/ptm/m/n/10 (Fi-gura 1[]) ilus-tra essa di-fe-rença,
  []
 
 <figuras/balanceamento_classes.png, id=13, 462.528pt x 346.896pt>
 File: figuras/balanceamento_classes.png Graphic file (type png)
 <use figuras/balanceamento_classes.png>
-Package pdftex.def Info: figuras/balanceamento_classes.png  used on input line 128.
+Package pdftex.def Info: figuras/balanceamento_classes.png  used on input line 135.
 (pdftex.def)             Requested size: 252.0pt x 189.00427pt.
 [3 <./figuras/balanceamento_classes.png>]
 <figuras/correlacao.png, id=19, 505.89pt x 361.35pt>
 File: figuras/correlacao.png Graphic file (type png)
 <use figuras/correlacao.png>
-Package pdftex.def Info: figuras/correlacao.png  used on input line 141.
+Package pdftex.def Info: figuras/correlacao.png  used on input line 148.
 (pdftex.def)             Requested size: 252.0pt x 180.00188pt.
 <figuras/umap_label.png, id=20, 433.62pt x 361.35pt>
 File: figuras/umap_label.png Graphic file (type png)
 <use figuras/umap_label.png>
-Package pdftex.def Info: figuras/umap_label.png  used on input line 158.
+Package pdftex.def Info: figuras/umap_label.png  used on input line 165.
 (pdftex.def)             Requested size: 252.0pt x 210.00218pt.
 <figuras/umap_source.png, id=21, 433.62pt x 361.35pt>
 File: figuras/umap_source.png Graphic file (type png)
 <use figuras/umap_source.png>
-Package pdftex.def Info: figuras/umap_source.png  used on input line 165.
+Package pdftex.def Info: figuras/umap_source.png  used on input line 172.
 (pdftex.def)             Requested size: 252.0pt x 210.00218pt.
 
 Underfull \vbox (badness 4316) has occurred while \output is active []
@@ -346,12 +346,12 @@ Underfull \vbox (badness 4316) has occurred while \output is active []
 <figuras/wordcloud_class0.png, id=28, 803.0pt x 401.5pt>
 File: figuras/wordcloud_class0.png Graphic file (type png)
 <use figuras/wordcloud_class0.png>
-Package pdftex.def Info: figuras/wordcloud_class0.png  used on input line 182.
+Package pdftex.def Info: figuras/wordcloud_class0.png  used on input line 189.
 (pdftex.def)             Requested size: 252.0pt x 126.00143pt.
 <figuras/wordcloud_class1.png, id=29, 803.0pt x 401.5pt>
 File: figuras/wordcloud_class1.png Graphic file (type png)
 <use figuras/wordcloud_class1.png>
-Package pdftex.def Info: figuras/wordcloud_class1.png  used on input line 189.
+Package pdftex.def Info: figuras/wordcloud_class1.png  used on input line 196.
 (pdftex.def)             Requested size: 252.0pt x 126.00143pt.
  [5 <./figuras/wordcloud_class0.png (PNG copy)> <./figuras/wordcloud_class1.png (PNG copy)>]
 
@@ -378,9 +378,9 @@ Here is how much of TeX's memory you used:
  27773 multiletter control sequences out of 15000+600000
  661624 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,8n,65p,974b,261s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,8n,65p,974b,263s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Program Files/MiKTeX/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (6 pages, 748837 bytes).
+Output written on main.pdf (6 pages, 748890 bytes).
 PDF statistics:
  58 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
