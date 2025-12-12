@@ -1,4 +1,5 @@
 import base64
+import json
 from pathlib import Path
 import pandas as pd
 from datetime import datetime
@@ -8,9 +9,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # --- Caminhos ---
-PROC = Path("data/processed")
-FIGS = Path("reports/figures")
-REPORTS = Path("reports")
+BASE_DIR = Path(__file__).resolve().parent.parent
+PROC = BASE_DIR / "data" / "processed"
+FIGS = BASE_DIR / "reports" / "figures"
+REPORTS = BASE_DIR / "reports"
 
 # --- Função auxiliar: converter imagem em base64 ---
 def img_to_base64(path):
@@ -70,6 +72,29 @@ def gerar_interpretacao(df, top0, top1):
 
     return " ".join(texto)
 
+# --- Gráfico de Sentimento ---
+def generate_sentiment_chart(df):
+    if "sentiment_label" not in df.columns:
+        return None
+    
+    counts = df["sentiment_label"].value_counts()
+    order = ["Negativo", "Neutro", "Positivo"]
+    labels = [x for x in order if x in counts.index]
+    values = [counts[x] for x in labels]
+    colors = ["#d62728" if x == "Negativo" else "#7f7f7f" if x == "Neutro" else "#2ca02c" for x in labels]
+
+    plt.figure(figsize=(8, 5))
+    bars = plt.bar(labels, values, color=colors, alpha=0.8, edgecolor='black')
+    plt.title("Distribuição de Sentimento dos Textos")
+    plt.xlabel("Sentimento")
+    plt.ylabel("Contagem")
+    plt.grid(axis="y", linestyle="--", alpha=0.5)
+    
+    path = FIGS / "sentiment_dist.png"
+    plt.savefig(path, bbox_inches="tight")
+    plt.close()
+    return img_to_base64(path)
+
 # --- Relatório HTML ---
 if __name__ == "__main__":
     print("🧩 Gerando relatório final com interpretação automática...")
@@ -89,6 +114,7 @@ if __name__ == "__main__":
     img_corr = img_to_base64(FIGS / "correlacao.png")
     img_umap_label = img_to_base64(FIGS / "umap_label.png")
     img_umap_source = img_to_base64(FIGS / "umap_source.png")
+    img_sentiment = generate_sentiment_chart(df)
 
     # Nuvens e TF-IDF
     print("☁️  Gerando nuvens de palavras e top termos...")
@@ -111,6 +137,69 @@ if __name__ == "__main__":
 
     table0_html = df_to_html_table(top0, "#2a4b8d")
     table1_html = df_to_html_table(top1, "#b03060")
+
+    # --- Textos Explicativos (Baseados no app.py) ---
+    txt_balance = """
+    <div style="margin-top:15px; padding:15px; background:#f4f6f9; border-left:4px solid #2a4b8d; border-radius:4px; font-size:0.95em;">
+        <b>Interpretação Técnica:</b><br>
+        A distribuição de classes apresenta um desequilíbrio significativo. Em contextos de detecção de risco psicossocial, o desbalanceamento pode induzir o modelo a um viés majoritário, comprometendo a sensibilidade ou a especificidade da detecção. É crucial aplicar técnicas de reamostragem ou pesos de classe durante o treinamento para garantir que o modelo aprenda a distinguir padrões sutis na classe minoritária, evitando generalizações excessivas.
+    </div>
+    """
+
+    txt_corr = """
+    <div style="margin-top:15px; padding:15px; background:#f4f6f9; border-left:4px solid #2a4b8d; border-radius:4px; font-size:0.95em;">
+        <b>Análise de Features:</b><br>
+        O mapa de calor indica correlações fracas entre as variáveis estruturais (metadados do texto) e a classe alvo. Isso demonstra que características superficiais, como o comprimento da mensagem ou contagem de caracteres, não são preditores confiáveis isoladamente para ideação suicida. A detecção eficaz depende, portanto, da análise semântica profunda e do contexto linguístico, justificando o uso de embeddings complexos e modelos de NLP avançados.
+    </div>
+    """
+
+    txt_umap = """
+    <div style="margin-top:15px; padding:15px; background:#f4f6f9; border-left:4px solid #2a4b8d; border-radius:4px; font-size:0.95em;">
+        <b>Análise de Variedade (Manifold Learning):</b><br>
+        A projeção UMAP revela a estrutura latente dos dados textuais:
+        <ul style="margin-top:5px; margin-bottom:0;">
+            <li><b>Separação de Classes:</b> Observa-se uma distinção topológica entre textos de controle e ideação, embora existam regiões de fronteira difusa, indicando ambiguidade semântica em certos casos.</li>
+            <li><b>Viés de Domínio (Source Bias):</b> A forte clusterização baseada na fonte dos dados evidencia que cada origem possui uma "assinatura" linguística própria. Isso alerta para o risco de o modelo aprender características do dataset em vez do fenômeno clínico, exigindo estratégias de validação robustas.</li>
+        </ul>
+    </div>
+    """
+
+    txt_sentiment = ""
+    if img_sentiment:
+        txt_sentiment = f"""
+        <div class="card">
+            <h2>Análise de Sentimento</h2>
+            <img src="data:image/png;base64,{img_sentiment}"/>
+            <div style="margin-top:15px; padding:15px; background:#f4f6f9; border-left:4px solid #2a4b8d; border-radius:4px; font-size:0.95em;">
+                <b>Análise de Polaridade:</b><br>
+                A predominância de textos com polaridade negativa é consistente com a natureza do corpus. Contudo, a existência de segmentos classificados como neutros ou positivos evidencia a limitação de abordagens puramente baseadas em léxicos de sentimento. A ideação suicida pode ser expressa através de resignação calma (falso neutro) ou ironia, exigindo modelos capazes de inferir intenção pragmática além da polaridade superficial.
+            </div>
+        </div>
+        """
+
+    # --- Tópicos (LDA) ---
+    html_topics = ""
+    topics_path = PROC / "topics.json"
+    if topics_path.exists():
+        with open(topics_path, "r", encoding="utf-8") as f:
+            topics_data = json.load(f)
+        
+        if topics_data:
+            topics_list_html = ""
+            for topic, words in topics_data.items():
+                badges = "".join([f"<span style='background:#e1e4e8; color:#24292e; padding:2px 8px; margin:2px; border-radius:12px; font-size:0.85em; display:inline-block; border:1px solid #d1d5da;'>{w}</span>" for w in words])
+                topics_list_html += f"<div style='margin-bottom:15px; break-inside: avoid;'><b>{topic}</b><br><div style='margin-top:5px;'>{badges}</div></div>"
+
+            html_topics = f"""
+            <div class="card">
+                <h2>Modelagem de Tópicos (LDA)</h2>
+                <div style="column-count: 2; column-gap: 20px;">{topics_list_html}</div>
+                <div style="margin-top:15px; padding:15px; background:#f4f6f9; border-left:4px solid #2a4b8d; border-radius:4px; font-size:0.95em;">
+                    <b>Interpretação Semântica:</b><br>
+                    A Modelagem de Tópicos Latentes (LDA) identificou agrupamentos de palavras que co-ocorrem frequentemente, revelando os temas subjacentes do corpus. Tópicos contendo termos relacionados a sentimentos diretos indicam expressão de sofrimento, enquanto outros podem revelar estressores contextuais (escola, família, trabalho). Essa análise permite contextualizar a ideação suicida além da classificação binária.
+                </div>
+            </div>
+            """
 
     # HTML
     html = f"""
@@ -156,9 +245,11 @@ footer{{text-align:center;padding:20px;background:#2a4b8d;color:white;font-size:
 </div>
 </div>
 
-<div class="card"><h2>Distribuição de Classes</h2><img src="data:image/png;base64,{img_balance}"/></div>
-<div class="card"><h2>Correlação entre Variáveis Numéricas</h2><img src="data:image/png;base64,{img_corr}"/></div>
-<div class="card"><h2>Projeções UMAP</h2><img src="data:image/png;base64,{img_umap_label}"/><img src="data:image/png;base64,{img_umap_source}"/></div>
+<div class="card"><h2>Distribuição de Classes</h2><img src="data:image/png;base64,{img_balance}"/>{txt_balance}</div>
+<div class="card"><h2>Correlação entre Variáveis Numéricas</h2><img src="data:image/png;base64,{img_corr}"/>{txt_corr}</div>
+<div class="card"><h2>Projeções UMAP</h2><img src="data:image/png;base64,{img_umap_label}"/><img src="data:image/png;base64,{img_umap_source}"/>{txt_umap}</div>
+{txt_sentiment}
+{html_topics}
 <div class="card"><h2>Nuvens de Palavras</h2><h3>Classe 0 — Não Suicida</h3><img src="data:image/png;base64,{wc_0}"/><h3>Classe 1 — Ideação Suicida</h3><img src="data:image/png;base64,{wc_1}"/></div>
 <div class="card"><h2>Top 20 Palavras por Classe</h2><h3>Classe 0 — Não Suicida</h3>{table0_html}<h3>Classe 1 — Ideação Suicida</h3>{table1_html}</div>
 <div class="card"><h2>Análise Interpretativa</h2><div class="analysis">{interpretacao}</div></div>
